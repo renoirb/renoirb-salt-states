@@ -1,0 +1,9 @@
+## Managed by Salt Stack
+
+alias salt='sudo salt'
+alias salt-call='sudo salt-call'
+alias salt-key='sudo salt-key'
+alias salt-man='echo "Reminder: this is an alias of    salt-call sys.doc" ; sudo salt-call --local sys.doc'
+alias salt-events='echo "Reminder: this is an alias of    salt-run state.event pretty=True" ; sudo salt-run state.event pretty=True'
+
+# vi: syntax=sh ts=4 noexpandtab

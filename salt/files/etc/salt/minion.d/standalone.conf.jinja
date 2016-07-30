@@ -1,0 +1,13 @@
+## Managed by Salt Stack. Do NOT edit Manually!
+## Source: {{ source }}
+
+# Running as Sandalone ("masterless") Minion.
+# Note that the salt-minion daemon doesn't need to run
+file_client: local
+master: localhost
+
+log_level: info
+log_level_logfile: info
+
+state_verbose: False
+state_output: mixed
