@@ -6,8 +6,8 @@ set        $vhost_docroot "{{ virtual_host_docroot }}";
 add_header X-Author "{{ virtual_host_author }}";
 
 index     index.php index.html;
+try_files $uri $uri/ /index.php$is_args$args;
 
-# Runtime parameters, at the end!
 location ~ \.php$ {
   expires 1m;
   include {{ virtual_host_fcgi_handler }};
