@@ -53,7 +53,4 @@ else
   echo 'We will not be upgrading packages today, we did it less than 10 days ago.'
 fi
 
-
-[[ -d /vagrant ]] && salt-call --local state.highstate -l info
-
 echo '... bootstrap done'

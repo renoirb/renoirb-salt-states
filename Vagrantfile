@@ -72,7 +72,7 @@ service salt-minion restart
 
 echo 'Running highstate, this may take a while.'
 
-salt-call state.highstate -l info
+salt-call --local state.highstate -l info
 
 if [[ -f /usr/bin/salt-call ]]; then
   salt-call --local --log-level=quiet --no-color grains.get ip4_interfaces:eth1 --output=json | python -c 'import sys,json; print json.load(sys.stdin)["local"][0]' > /vagrant/.ip
