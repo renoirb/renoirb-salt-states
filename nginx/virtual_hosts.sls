@@ -9,8 +9,9 @@ include:
 {%-   set fcgi_handler = obj.get('fcgi_handler', 'php7_0_params') %}
 {%-   set port         = obj.get('port', 80) %}
 
-/etc/nginx/{{ fcgi_handler }}:
-  file.exists: []
+{{ slug }} requires /etc/nginx/{{ fcgi_handler }} checking if present:
+  file.exists:
+    - name: /etc/nginx/{{ fcgi_handler }}
 
 {{ docroot }}:
   file.directory: []
