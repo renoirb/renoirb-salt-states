@@ -13,7 +13,13 @@
  #}
 
 {%- set process_owner = salt['pillar.get']('nginx:process_owner', 'www-data') %}
-{%- set errorStatuses = [(403, 'Forbidden'),(404, 'Not Found'),(405, 'Not Allowed'),(500,'Internal Server Error'),(501,'Bad Gateway'),(502,'Service Unavailable')] -%}
+{%- set errorStatuses = [ (403, 'Forbidden')
+                         ,(404, 'Not Found')
+                         ,(405, 'Not Allowed')
+                         ,(500,'Internal Server Error')
+                         ,(501,'Bad Gateway')
+                         ,(502,'Service Unavailable')
+] %}
 
 NGINX superseeds Apache:
   pkg.purged:
@@ -22,29 +28,32 @@ NGINX superseeds Apache:
       - apache2.2-common
 
 nginx:
+  pkgrepo.managed:
+    - ppa: nginx/stable
+    - keyid: C300EE8C
+    - file: /etc/apt/sources.list.d/nginx-stable-trusty.list
   pkg.installed:
+    - refresh: True
     - pkgs:
+      - nginx
       - nginx-extras
   service.running:
     - enable: True
     - reload: True
 
 /etc/nginx/sites-enabled/default:
-  file.absent:
-    - require:
-      - pkg: nginx
+  file.absent: []
+
+/var/log/nginx:
+  file.directory:
+    - user: {{ process_owner }}
+    - group: {{ process_owner }}
 
 /var/cache/nginx:
   file.directory:
-    - user: www-data
-    - group: www-data
+    - user: {{ process_owner }}
+    - group: {{ process_owner }}
     - makedirs: True
-
-nginx-ppa:
-  pkgrepo.managed:
-    - ppa: nginx/stable
-    - require_in:
-      - pkg: nginx
 
 {% for conf in ['nginx.conf','common_params','ssl_params'] %}
 /etc/nginx/{{ conf }}:
@@ -71,3 +80,4 @@ nginx-ppa:
       - file: /var/www/errors
       - file: /etc/nginx/common_params
 {% endfor %}
+

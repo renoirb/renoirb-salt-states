@@ -18,4 +18,3 @@ mysql:
     - name: /etc/mysql/conf.d/client-unicode.cnf
     - source: salt://mysql/files/client-unicode.cnf
     - mode: 644
-
