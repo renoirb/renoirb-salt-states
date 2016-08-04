@@ -26,3 +26,8 @@ Ones I looked at and/or worked with are the following:
 * [Khris Richardson](https://github.com/khrisrichardson/salt-states)
 * [RadiaSoft LLC](https://github.com/radiasoft/salt-conf)
 
+And those where I should take a look at:
+
+* [oscm/saltstack](https://github.com/oscm/saltstack)
+* [ahus1/saltconsul-examples](https://github.com/ahus1/saltconsul-examples)
+
