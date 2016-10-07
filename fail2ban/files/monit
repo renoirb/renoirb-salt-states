@@ -1,0 +1,8 @@
+## Managed by Salt stack. Do NOT edit manually!
+
+check process fail2ban
+  with pidfile "/var/run/fail2ban/fail2ban.pid"
+  start = "/usr/sbin/service fail2ban start"
+  stop  = "/usr/sbin/service fail2ban stop"
+  if not exist for 3 cycles then restart
+  if 5 restarts within 5 cycles then timeout

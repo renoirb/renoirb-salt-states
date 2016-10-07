@@ -1,0 +1,32 @@
+" Managed by Salt Stack. Do NOT edit manually!
+
+set showmatch
+set hlsearch
+
+set modeline
+set showmode
+set autoindent
+set smartindent
+set smarttab
+set expandtab
+
+set textwidth=79
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
+
+set list listchars=tab:\ \ ,trail:·
+
+if has("autocmd")
+  augroup module
+    autocmd BufRead,BufNewFile,BufReadPost *.json set filetype=json
+    autocmd BufRead,BufNewFile,BufReadPost *.yaml set filetype=yaml
+    autocmd BufRead,BufNewFile,BufReadPost *.yml set filetype=yaml
+    autocmd BufRead,BufNewFile,BufReadPost *.sls set filetype=yaml
+  augroup END
+endif
+
+filetype plugin indent on
+syntax on
+
+" vim: set ft=vim :

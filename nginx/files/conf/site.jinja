@@ -1,0 +1,62 @@
+## Managed by Salt Stack. Do NOT edit Manually!
+## {{ name }}:{{ port }}
+
+{%- if aliases %}
+{%-   set server_name = '%s %s'|format(name, aliases) %}
+{%- else %}
+{%-   set server_name = name %}
+{%- endif %}
+{%- if listen_append %}
+{%-   set listen = '%s %s'|format(port, listen_append) %}
+{%- else %}
+{%-   set listen = port %}
+{%- endif %}
+
+server {
+  listen {{ listen }};
+  listen [::]:{{ listen }};
+
+  server_name {{ server_name }};
+  root        {{ docroot }};
+
+  set         $docroot "{{ docroot }}";
+  add_header  X-Author "{{ author }}";
+  index       index.html index.htm;
+
+  add_header X-Script-Name $fastcgi_script_name;
+
+{%- if include != 'None' %}
+
+  include {{ include }};
+{%- endif %}
+
+{%  if fcgi_handler != 'None' %}
+  ## fcgi_handler defined, we will then support PHP
+  try_files   /maintenance.html
+              $uri
+              $uri.html
+              $uri/index.html
+              /index.php;
+
+  ## ref: https://www.nginx.com/resources/wiki/start/topics/examples/phpfcgi/
+  location ~* [^/]\.php(/|$) {
+    fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+    if (!-f $document_root$fastcgi_script_name) {
+        return 404;
+    }
+    fastcgi_pass unix:{{ fcgi_handler }};
+    include      fpm_params;
+  }
+{%- else %}
+  ## fcgi_handler IS NOT defined, NO PHP support.
+  try_files   /maintenance.html
+              $uri
+              $uri.html
+              $uri/index.html;
+{%- endif %}
+
+  include     common_params;
+
+}
+
+# vim: et ts=2 sw=2 ft=conf

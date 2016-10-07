@@ -1,9 +1,0 @@
-server {
-  listen {{ virtual_host_port }};
-  listen [::]:{{ virtual_host_port }};
-  server_name {{ virtual_host_name }};
-  include     common_params;
-  include     vhosts/{{ virtual_host_slug }};
-}
-
-# vim: et ts=2 sw=2 ft=conf

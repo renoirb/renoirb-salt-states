@@ -1,13 +1,4 @@
-# Managed by Salt Stack. Do NOT edit Manually!
-# Source: {{ source }}
-
-etag off;
-server_tokens off;
-source_charset utf-8;
-charset utf-8;
-
-more_clear_headers 'X-Powered-By';
-more_clear_headers 'Server';
+## Managed by Salt Stack. Do NOT edit Manually!
 
 error_page 500 /errors/500.html;
 error_page 502 /errors/502.html;
@@ -22,47 +13,26 @@ location ^~ /errors/ {
     root /var/www;
 }
 
-# Cache.appcache, your document html and data
-location ~* \.(?:manifest|appcache|html?|xml|json)$ {
-    expires 1h;
-    access_log /var/log/nginx/static.log;
-}
-
-# Feed
-location ~* \.(?:rss|atom)$ {
-    expires 1h;
-    add_header Cache-Control "public";
-}
-
-location ~* "^.+\.(jpe?g|gif|css|png|js|ico|pdf|zip|tar|t?gz|mp3|wav|swf)$" {
-  expires    1h;
+location ~* \.(?:jpe?g|gif|png|ico|pdf|zip|tar|t?gz|mp3|wav|swf|gz|mp4|ogg|ogv|webm|htc)$ {
   add_header Cache-Control public;
   fastcgi_hide_header Set-Cookie;
   tcp_nodelay off;
 }
 
-# Media: images, icons, video, audio, HTC
-location ~* "\.(?:jpg|jpeg|gif|png|ico|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$" {
-  expires 1h;
-  access_log off;
+location ~* \.(?:svgz?)$ {
   add_header Cache-Control public;
   fastcgi_hide_header Set-Cookie;
+  tcp_nodelay off;
 }
 
-# CSS and Javascript
 location ~* \.(?:css|js)$ {
-  expires 1m;
-  access_log off;
   add_header Cache-Control public;
   fastcgi_hide_header Set-Cookie;
-  tcp_nodelay off;
 }
 
 # Cross domain webfont access
 location ~* \.(?:ttf|ttc|otf|eot|woff|font.css)$ {
   add_header "Access-Control-Allow-Origin" "*";
-  expires 1m;
-  access_log off;
   add_header Cache-Control public;
   fastcgi_hide_header Set-Cookie;
 }
@@ -82,17 +52,11 @@ location = /favicon.ico {
   log_not_found off;
   access_log off;
 }
+
 location = /robots.txt {
   allow all;
   log_not_found off;
   access_log off;
 }
 
-# Tell Nginx to cache open file handles, "not found" errors, metadata about
-# files and their permissions, etc. The upside of this is that Nginx can
-# immediately begin sending data when a popular file is requested, and will also
-# know to immediately send a 404 if a file is missing on disk, and so on.
-open_file_cache max=1000 inactive=20s;
-open_file_cache_valid 30s;
-open_file_cache_min_uses 2;
-open_file_cache_errors on;
+# vim: et ts=2 sw=2 ft=conf

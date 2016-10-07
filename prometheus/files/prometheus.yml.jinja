@@ -1,0 +1,24 @@
+
+global:
+  scrape_interval:     10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  - job_name: prometheus
+    scrape_interval: 5s
+    static_configs:
+      - targets: {{ prometheus_exporter_list }}
+        labels:
+          level: {{ level }}
+  - job_name: node
+    static_configs:
+      - targets: {{ node_exporter_list }}
+        labels:
+          level: {{ level }}
+          exporter: node
+  - job_name: apache
+    static_configs:
+      - targets: {{ apache_exporter_list }}
+        labels:
+          level: {{ level }}
+          exporter: apache

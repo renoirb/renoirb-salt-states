@@ -1,17 +1,3 @@
-{#
- # NGINX common states
- #
- # See also:
- #   - https://github.com/kevva/states/blob/master/nginx/
- #   - [Difference between NGINX versions](https://gist.github.com/jpetazzo/1152774)
- #   - [Strong SSL security on NGINX](https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html)
- #   - http://nginx.org/en/docs/http/ngx_http_core_module.html#variables
- #   - http://www.cyberciti.biz/faq/custom-nginx-maintenance-page-with-http503/
- #   - [All static files will be served directly?](http://stackoverflow.com/questions/19515132/nginx-cache-static-files#answer-20843725)
- #   - https://www.varnish-cache.org/docs/3.0/tutorial/websockets.html
- #   - http://thruflo.com/post/23226473852/websockets-varnish-nginx
- #}
-
 {%- set process_owner = salt['pillar.get']('nginx:process_owner', 'www-data') %}
 {%- set errorStatuses = [ (403, 'Forbidden')
                          ,(404, 'Not Found')
@@ -31,7 +17,7 @@ nginx:
   pkgrepo.managed:
     - ppa: nginx/stable
     - keyid: C300EE8C
-    - file: /etc/apt/sources.list.d/nginx-stable-trusty.list
+    - file: /etc/apt/sources.list.d/nginx-stable.list
   pkg.installed:
     - refresh: True
     - pkgs:
@@ -49,20 +35,52 @@ nginx:
     - user: {{ process_owner }}
     - group: {{ process_owner }}
 
+/usr/local/sbin/nginx-site:
+  file.managed:
+    - source: salt://nginx/files/nginx-site.sh
+    - mode: 754
+
 /var/cache/nginx:
   file.directory:
     - user: {{ process_owner }}
     - group: {{ process_owner }}
     - makedirs: True
 
-{% for conf in ['nginx.conf','common_params','ssl_params'] %}
-/etc/nginx/{{ conf }}:
+{%- for conf in [
+                'compression.conf'
+               ,'filecache.conf'
+               ,'headers.conf'
+               ,'logging.conf'
+               ,'charset.conf'
+               ,'tls.conf'
+               ] %}
+/etc/nginx/conf.d/{{ conf }}:
   file.managed:
-    - source: salt://nginx/files/{{ conf }}.jinja
+    - source: salt://nginx/files/conf/{{ conf }}
+    - user: {{ process_owner }}
+    - group: {{ process_owner }}
+{%- endfor %}
+
+/etc/nginx/nginx.conf:
+  file.managed:
+    - source: salt://nginx/files/conf/nginx.conf.jinja
     - template: jinja
+    - user: {{ process_owner }}
+    - group: {{ process_owner }}
     - context:
         process_owner: {{ process_owner }}
-{% endfor %}
+
+/etc/nginx/fpm_params:
+  file.managed:
+    - source: salt://nginx/files/conf/fpm_params
+    - user: {{ process_owner }}
+    - group: {{ process_owner }}
+
+/etc/nginx/common_params:
+  file.managed:
+    - source: salt://nginx/files/conf/common_params
+    - user: {{ process_owner }}
+    - group: {{ process_owner }}
 
 /var/www/errors:
   file.directory:
@@ -76,8 +94,4 @@ nginx:
     - context:
         code: {{ code }}
         message: {{ message }}
-    - require:
-      - file: /var/www/errors
-      - file: /etc/nginx/common_params
-{% endfor %}
-
+{%- endfor %}

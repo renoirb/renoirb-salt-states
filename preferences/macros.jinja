@@ -1,0 +1,7 @@
+{%- macro preferences_vimrc(path, user='root', group='root', source='salt://preferences/files/vimrc') %}
+{{ path }}:
+  file.managed:
+    - source: {{ source }}
+    - user: {{ user }}
+    - group: {{ group }}
+{%- endmacro %}
