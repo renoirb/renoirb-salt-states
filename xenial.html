@@ -9,7 +9,7 @@
       <h1>Booting an empty Ubuntu Xenial VM</h1>
       <pre>
 curl -s -S -L "https://renoirb.github.io/renoirb-salt-states/bootstrap/xenial.sh" | bash
-curl -s -S -L https://renoirb.github.io/renoirb-salt-states/bootstrap/fileserver.conf /etc/salt/minion.d/fileserver.conf
+curl -s -S -L https://renoirb.github.io/renoirb-salt-states/bootstrap/fileserver.conf -o /etc/salt/minion.d/fileserver.conf
 salt-call --local state.sls salt.standalone
 salt-call state.sls basesystem
 salt-call state.highstate
