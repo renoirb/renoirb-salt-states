@@ -49,7 +49,7 @@ set -e
 
 export INIT_LEVEL="vagrant"
 export RUNAS="vagrant"
-curl -s -S -L "https://renoirb.github.io/renoirb-salt-states/bootstrap.sh" | bash
+curl -s -S -L "https://renoirb.github.io/renoirb-salt-states/bootstrap/trusty.sh" | bash
 salt-call --local ssh.set_known_host user=root hostname=github.com
 
 ## Want to use your own git repo, adjust lines below.

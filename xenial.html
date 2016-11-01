@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset=utf-8 />
+    <title>Booting an empty Ubuntu Xenial VM</title>
+  </head>
+  <body>
+    <div id="contents">
+      <h1>Booting an empty Ubuntu Xenial VM</h1>
+      <pre>
+curl -s -S -L "https://renoirb.github.io/renoirb-salt-states/bootstrap/xenial.sh" | bash
+curl -s -S -L https://renoirb.github.io/renoirb-salt-states/bootstrap/fileserver.conf /etc/salt/minion.d/fileserver.conf
+salt-call --local state.sls salt.standalone
+salt-call state.sls basesystem
+salt-call state.highstate
+      </pre>
+    </div>
+    <style>
+      ::-moz-selection { background: #fe57a1; color: #555; text-shadow: none; }
+      ::selection { background: #ececec; color: #555; text-shadow: none; }
+      html { padding: 30px 10px; font-size: 18px; line-height: 1.4; color: #555; background: #ececec; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      body { max-width: 600px; _width: 600px; margin: 5% auto; }
+      p { margin: 1em 0; }
+      #contents { margin: 0 auto; }
+      pre { overflow: scroll; border: 1px solid; padding: 10px; border-radius: 4px; background-color: rgb(249, 247, 243); box-shadow: 0px 0px 1px rgb(167, 169, 172); }
+    </style>
+  </body>
+</html>
+
