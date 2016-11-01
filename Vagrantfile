@@ -4,8 +4,12 @@ PROVIDER = ENV.fetch("VAGRANT_DEFAULT_PROVIDER", "virtualbox")
 
 Vagrant.configure(2) do |config|
 
+  ## Either use this one
+  #config.vm.box = "ubuntu/xenial64"
+  ## Or..
   config.vm.box = "trusty-cloud"
   config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+
   config.ssh.forward_agent = true
 
   # ref: https://github.com/mitchellh/vagrant/issues/1673
@@ -23,6 +27,11 @@ Vagrant.configure(2) do |config|
     # More info on http://fgrehm.viewdocs.io/vagrant-cachier/usage
     config.cache.scope = :box
     config.cache.enable :apt
+    ## If you are using Xenial, uncomment below
+    #config.cache.synced_folder_opts = {
+    #     owner: "_apt",
+    #     group: "_apt"
+    #}
   end
 
   config.vm.synced_folder ".", "/vagrant"
