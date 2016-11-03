@@ -2,6 +2,7 @@
 MEMORY = ENV.fetch("VAGRANT_MEMORY", "1024")
 PROVIDER = ENV.fetch("VAGRANT_DEFAULT_PROVIDER", "virtualbox")
 RELEASE = ENV.fetch("VAGRANT_UBUNTU_RELEASE", "trusty")
+SALT_STABLE_RELEASE = ENV.fetch("VAGRANT_SALT_STABLE_RELEASE", "2016.3")
 
 Vagrant.configure(2) do |config|
 
@@ -51,6 +52,12 @@ Vagrant.configure(2) do |config|
     v.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
     v.customize ["modifyvm", :id, "--pae", "on"]
   end
+
+  ## TODO, use this instead of my own script
+  #config.vm.provision "run bootstrap.saltstack.com", run: "always", keep_color: true, type: "shell" do |s|
+  #    s.inline = "curl -L https://bootstrap.saltstack.com | sudo sh -s -- stable $1"
+  #    s.args = SALT_STABLE_RELEASE
+  #end
 
   config.vm.provision "https://renoirb.github.io/renoirb-salt-states/bootstrap/"+RELEASE+".sh", run: "always", keep_color: true, type: "shell" do |s|
       s.args = RELEASE
