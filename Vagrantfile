@@ -42,7 +42,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.synced_folder ".", "/vagrant"
   config.vm.synced_folder "www", "/var/www", create: true
-  config.vm.synced_folder "provision/salt/minion.d", "/etc/salt/minion.d", create: true
+  config.vm.synced_folder "provision/salt", "/etc/salt", create: true
 
   config.vm.provider "virtualbox" do |v|
     v.name = config.vm.hostname
@@ -73,9 +73,11 @@ Vagrant.configure(2) do |config|
 
     set -e
 
-    if [[ ! -f "/vagrant/pillar.yml" ]]; then
-      touch /vagrant/pillar.yml
+    if [[ ! -f "/etc/salt/pillar.yml" ]]; then
+      touch /etc/salt/pillar.yml
     fi
+
+    service salt-minion stop
 
     salt-call --local ssh.set_known_host user=root hostname=github.com
 
@@ -88,7 +90,7 @@ Vagrant.configure(2) do |config|
     SETUP=$(salt-call pillar.get vagrant:setup --output=json | python -c 'import sys,json; print \",\".join(json.load(sys.stdin)[\"local\"])')
     echo "We will be also applying described in 'vagrant:setup' pillar: " ${SETUP}
     if [[ ! -z ${SETUP} ]]; then
-      salt-call state.sls $SETUP --local
+      salt-call --local state.sls $SETUP
     fi
 
   SHELL
