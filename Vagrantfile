@@ -73,8 +73,11 @@ Vagrant.configure(2) do |config|
 
     set -e
 
-    if [[ ! -f "/etc/salt/pillar.yml" ]]; then
-      touch /etc/salt/pillar.yml
+    if [[ ! -f "/vagrant/pillar.yml" ]]; then
+      touch /vagrant/pillar.yml
+    fi
+    if [[ ! -L "/etc/salt/pillar.yml" ]]; then
+      ln -s /vagrant/pillar.yml /etc/salt/pillar.yml
     fi
 
     service salt-minion stop
