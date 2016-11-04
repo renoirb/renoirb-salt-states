@@ -90,7 +90,7 @@ Vagrant.configure(2) do |config|
       curl -s -S -L https://renoirb.github.io/renoirb-salt-states/bootstrap/fileserver.conf -o /etc/salt/minion.d/fileserver.conf
     fi
 
-    SETUP=$(salt-call pillar.get vagrant:setup --output=json | python -c 'import sys,json; print \",\".join(json.load(sys.stdin)[\"local\"])')
+    SETUP=$(salt-call --local pillar.get vagrant:setup --output=json | python -c 'import sys,json; print \",\".join(json.load(sys.stdin)[\"local\"])')
     echo "We will be also applying described in 'vagrant:setup' pillar: " ${SETUP}
     if [[ ! -z ${SETUP} ]]; then
       salt-call --local state.sls $SETUP
