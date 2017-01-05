@@ -18,13 +18,6 @@ db-server:
     - reload: True
     - enable: True
 
-/etc/mysql/debian.cnf:
-  file.exists
-
-salt-dependency:
-  pkg.installed:
-    - name: python-mysqldb
-
 /etc/mysql/conf.d/lowmem.cnf:
   file.managed:
     - source: salt://mysql/files/lowmem.cnf

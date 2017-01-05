@@ -32,11 +32,11 @@ server {
 
 {%  if fcgi_handler != 'None' %}
   ## fcgi_handler defined, we will then support PHP
-  try_files   /maintenance.html
-              $uri
+  try_files   $uri
               $uri.html
+              $uri/
               $uri/index.html
-              /index.php;
+              /index.php?q=$uri&$args;
 
   ## ref: https://www.nginx.com/resources/wiki/start/topics/examples/phpfcgi/
   location ~* [^/]\.php(/|$) {
@@ -49,9 +49,9 @@ server {
   }
 {%- else %}
   ## fcgi_handler IS NOT defined, NO PHP support.
-  try_files   /maintenance.html
-              $uri
+  try_files   $uri
               $uri.html
+              $uri/
               $uri/index.html;
 {%- endif %}
 
