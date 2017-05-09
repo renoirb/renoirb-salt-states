@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Incomplete. See mysql.php
+ * Also, make one check per Memcache extension (memcached, memcache)
+ */
+
 // create PECL memcached Object
 $m = new Memcached();
 
